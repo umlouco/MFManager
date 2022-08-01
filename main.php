@@ -4,7 +4,7 @@
  * Plugin Name:       MF Manager
  * Plugin URI:        https://www.mario-flores.com/mf-manager/
  * Description:       Connector for the MF website manager dashboard.
- * Version:           3.0.0
+ * Version:           4.0.0
  * Requires at least: 5.2
  * Requires PHP:      5.6
  * Author:            Mario Flores
@@ -25,11 +25,23 @@ function mf_manager_menu_page()
         'mfmanager_settings_page',
         'mfmanager_load_settings'
     );
+    add_submenu_page(
+        'mfmanager_settings_page',
+        'Run update',
+        'Run',
+        'manage_options',
+        'mfmanager_run',
+        'mfmanager_run'
+    );
 }
 
 function mfmanager_load_settings()
 {
     include(plugin_dir_path(__FILE__) . 'views/settings.php');
+}
+
+function mfmanager_run(){
+    mfmanager_cron_exec(); 
 }
 
 function mfmanager_api_settings_init()
@@ -70,6 +82,7 @@ function mfmanager_cron_exec()
     require_once ABSPATH . 'wp-admin/includes/plugin.php';
     require_once ABSPATH . 'wp-admin/includes/update.php';
     require_once ABSPATH . 'wp-admin/includes/file.php';
+    $theme = wp_get_theme(); 
     $info = array();
     $info['name'] = get_bloginfo('name');
     $info['version']  = get_bloginfo('version');
@@ -78,7 +91,8 @@ function mfmanager_cron_exec()
     $info['template'] = get_bloginfo('template_url');
     $info['path'] = get_home_path();
     $info['ip'] = $_SERVER['SERVER_ADDR'];
-    $info['key'] = $options = get_option('mfmanager_api_settings');
+    $info['key'] =  get_option('mfmanager_api_settings');
+    $info['theme_version'] = $theme->Version; 
     $data_string = json_encode($info);
     $curl = curl_init();
     try {
