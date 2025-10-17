@@ -4,7 +4,7 @@
  * Plugin Name:       MF Manager
  * Plugin URI:        https://www.mario-flores.com/mf-manager/
  * Description:       Connector for the MF website manager dashboard.
- * Version:           4.0.0
+ * Version:           6.0.0
  * Requires at least: 5.2
  * Requires PHP:      5.6
  * Author:            Mario Flores
